@@ -7,6 +7,9 @@ int main()
     sf::CircleShape circle(100); 
     circle.setFillColor(sf::Color::Green);
     circle.setPosition(350, 250); 
+
+    bool isSpacePressed = false;
+
     while (window.isOpen()) 
     {
         sf::Event event;
@@ -14,10 +17,22 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
+            if (event.type == sf::Event::KeyPressed) 
+            {
+                if (event.key.code == sf::Keyboard::Space) 
+                {
+                    isSpacePressed = true;
+                }
+            }
+            if (event.type == sf::Event::KeyReleased) 
+            {
+                if (event.key.code == sf::Keyboard::Space) 
+                {
+                    isSpacePressed = false;
+                }
+            }
         }
-
-        
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) 
+        if (isSpacePressed) 
         {
             circle.setFillColor(sf::Color::Red);
         } else {
