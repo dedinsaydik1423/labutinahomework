@@ -1,11 +1,20 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <random>
+#include <vector>
+sf::Color getRandomColor() 
+{
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_int_distribution<uint8_t> d(0, 255);
+    return sf::Color{d(gen), d(gen), d(gen)};
+}
 
 int main() 
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Hover Rectangle");
-    sf::RectangleShape rectangle(sf::Vector2f(200, 100));
-    rectangle.setPosition(300, 250); 
-    rectangle.setFillColor(sf::Color::Green); 
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Circle Drawer");
+    
+    std::vector<sf::CircleShape> circles;
 
     while (window.isOpen()) 
     {
@@ -15,30 +24,34 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
 
-            
-                
-            if (event.type == sf::Event::MouseMoved) 
+            if (event.type == sf::Event::MouseButtonPressed) 
             {
-                sf::Vector2f mousePos((float)event.mouseMove.x, (float)event.mouseMove.y);
-                
-                
-                if (rectangle.getGlobalBounds().contains(mousePos)) 
+                if (event.mouseButton.button == sf::Mouse::Left) 
                 {
-                    rectangle.setFillColor(sf::Color::Red); 
-                    
-                } else 
-                {
-                    rectangle.setFillColor(sf::Color::Green); 
+                    sf::CircleShape circle(30); 
+                    circle.setFillColor(sf::Color::White);
+                    circle.setPosition(static_cast<float>(event.mouseButton.x - circle.getRadius()), 
+                                       static_cast<float>(event.mouseButton.y - circle.getRadius()));
+                    circles.push_back(circle); 
                     
                 }
             }
-        }
 
-        
-        window.clear();
-        window.draw(rectangle);
+            
+            if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Space) {
+                    
+                    for (auto& circle : circles) {
+                        circle.setFillColor(getRandomColor());
+                    }
+                }
+            }
+        }
+        window.clear(sf::Color::Black);
+        for (const auto& circle : circles) {
+            window.draw(circle);
+        }
         window.display();
     }
-
     return 0;
 }
