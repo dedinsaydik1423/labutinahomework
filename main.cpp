@@ -2,13 +2,10 @@
 
 int main() 
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Circle Color Change");
-    
-    sf::CircleShape circle(100); 
-    circle.setFillColor(sf::Color::Green);
-    circle.setPosition(350, 250); 
-
-    bool isSpacePressed = false;
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Hover Rectangle");
+    sf::RectangleShape rectangle(sf::Vector2f(200, 100));
+    rectangle.setPosition(300, 250);
+    rectangle.setFillColor(sf::Color::Green); 
 
     while (window.isOpen()) 
     {
@@ -17,30 +14,27 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
-            if (event.type == sf::Event::KeyPressed) 
-            {
-                if (event.key.code == sf::Keyboard::Space) 
-                {
-                    isSpacePressed = true;
-                }
-            }
-            if (event.type == sf::Event::KeyReleased) 
-            {
-                if (event.key.code == sf::Keyboard::Space) 
-                {
-                    isSpacePressed = false;
-                }
-            }
-        }
-        if (isSpacePressed) 
-        {
-            circle.setFillColor(sf::Color::Red);
-        } else {
-            circle.setFillColor(sf::Color::Green);
         }
 
+        
+        sf::Vector2f mousePos = (sf::Vector2f)sf::Mouse::getPosition(window);
+        
+        
+        
+        if (rectangle.getGlobalBounds().contains(mousePos)) 
+        {
+            rectangle.setFillColor(sf::Color::Red); 
+            
+        } else 
+        {
+            rectangle.setFillColor(sf::Color::Green); 
+            
+        }
+
+        
+        
         window.clear();
-        window.draw(circle);
+        window.draw(rectangle);
         window.display();
     }
 
