@@ -1,12 +1,13 @@
 #include <SFML/Graphics.hpp>
-int main()
+
+int main() 
 {
-    sf::RenderWindow window(sf::VideoMode(800,800), "Rotation", sf::Style::Default);
-    window.setFramerateLimit(60);
-    sf::CircleShape square(80, 4);
-    square.setFillColor(sf::Color::Green);
-    square.setPosition({300, 200});
-    while (window.isOpen())
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Circle Color Change");
+    
+    sf::CircleShape circle(100); 
+    circle.setFillColor(sf::Color::Green);
+    circle.setPosition(350, 250); 
+    while (window.isOpen()) 
     {
         sf::Event event;
         while (window.pollEvent(event)) 
@@ -14,13 +15,19 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-        square.rotate(0.1f);
 
-        window.clear(sf::Color::Black);
-        window.draw(square);
+        
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) 
+        {
+            circle.setFillColor(sf::Color::Red);
+        } else {
+            circle.setFillColor(sf::Color::Green);
+        }
 
+        window.clear();
+        window.draw(circle);
         window.display();
     }
 
-    
+    return 0;
 }
